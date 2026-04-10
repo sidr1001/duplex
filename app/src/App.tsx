@@ -12,9 +12,9 @@ import { FinalCTA } from './sections/FinalCTA';
 import { Footer } from './sections/Footer';
 import { FloatingButton } from './components/FloatingButton';
 import { Toaster } from '@/components/ui/sonner';
-import { AdminPanel } from '@/components/AdminPanel';
 import { MapSection } from '@/sections/MapSection';
 import { useSiteContent } from '@/context/SiteContentContext';
+import { AdminPage } from '@/pages/AdminPage';
 
 function App() {
   const { content } = useSiteContent();
@@ -51,6 +51,10 @@ function App() {
     setMeta('og:image', content.seo.ogImage, 'property');
   }, [content.seo]);
 
+  if (window.location.pathname === '/admin') {
+    return <AdminPage />;
+  }
+
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       <Hero />
@@ -66,7 +70,6 @@ function App() {
       <FinalCTA />
       <Footer />
       <FloatingButton />
-      <AdminPanel />
       <Toaster />
     </div>
   );

@@ -8,92 +8,55 @@ import { toast } from 'sonner';
 
 export function AdminPanel() {
   const { content, updateContent, resetContent } = useSiteContent();
-  const [isOpen, setIsOpen] = useState(false);
-  const [jsonDraft, setJsonDraft] = useState(() => JSON.stringify(content.map.objects, null, 2));
+  const [jsonDraft, setJsonDraft] = useState(() => JSON.stringify(content, null, 2));
 
-  const formattedJson = useMemo(() => JSON.stringify(content, null, 2), [content]);
+  const pretty = useMemo(() => JSON.stringify(content, null, 2), [content]);
 
-  const onMapObjectsSave = () => {
+  const saveJson = () => {
     try {
-      const objects = JSON.parse(jsonDraft) as SiteContent['map']['objects'];
-      updateContent({
-        ...content,
-        map: {
-          ...content.map,
-          objects
-        }
-      });
-      toast.success('Объекты карты обновлены');
+      const parsed = JSON.parse(jsonDraft) as SiteContent;
+      updateContent(parsed);
+      toast.success('Контент обновлен');
     } catch {
-      toast.error('Невалидный JSON для объектов карты');
+      toast.error('Ошибка JSON: проверьте формат');
     }
   };
 
-  if (!isOpen) {
-    return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed left-6 bottom-6 z-[60] rounded-full bg-dark text-white px-4 py-2 text-sm shadow-lg"
-      >
-        Админка
-      </button>
-    );
-  }
-
   return (
-    <aside className="fixed right-0 top-0 z-[70] h-screen w-full max-w-xl overflow-y-auto border-l bg-white p-4 shadow-2xl">
-      <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-xl font-bold">Админка контента</h3>
-        <Button variant="outline" onClick={() => setIsOpen(false)}>Закрыть</Button>
-      </div>
+    <div className="max-w-6xl mx-auto p-4 md:p-8">
+      <h1 className="text-3xl font-bold mb-2">Админ-панель сайта</h1>
+      <p className="text-dark-light mb-6">Здесь можно редактировать контакты, SEO, все тексты/цены в блоках и точки на карте.</p>
 
-      <div className="space-y-4">
-        <div>
-          <label className="text-sm font-medium">Название компании</label>
-          <Input value={content.contacts.companyName} onChange={(e) => updateContent({ ...content, contacts: { ...content.contacts, companyName: e.target.value } })} />
-        </div>
+      <div className="grid md:grid-cols-2 gap-4 mb-6">
         <div>
           <label className="text-sm font-medium">Телефон (отображение)</label>
           <Input value={content.contacts.phoneDisplay} onChange={(e) => updateContent({ ...content, contacts: { ...content.contacts, phoneDisplay: e.target.value } })} />
         </div>
         <div>
-          <label className="text-sm font-medium">Телефон (href)</label>
-          <Input value={content.contacts.phoneHref} onChange={(e) => updateContent({ ...content, contacts: { ...content.contacts, phoneHref: e.target.value } })} />
+          <label className="text-sm font-medium">Email для заявок</label>
+          <Input value={content.contacts.leadRecipientEmail} onChange={(e) => updateContent({ ...content, contacts: { ...content.contacts, leadRecipientEmail: e.target.value } })} />
         </div>
         <div>
-          <label className="text-sm font-medium">Контактный email</label>
-          <Input type="email" value={content.contacts.email} onChange={(e) => updateContent({ ...content, contacts: { ...content.contacts, email: e.target.value } })} />
+          <label className="text-sm font-medium">SEO Title</label>
+          <Input value={content.seo.title} onChange={(e) => updateContent({ ...content, seo: { ...content.seo, title: e.target.value } })} />
         </div>
         <div>
-          <label className="text-sm font-medium">Куда отправлять заявки</label>
-          <Input type="email" value={content.contacts.leadRecipientEmail} onChange={(e) => updateContent({ ...content, contacts: { ...content.contacts, leadRecipientEmail: e.target.value } })} />
-        </div>
-        <div>
-          <label className="text-sm font-medium">Путь до логотипа</label>
-          <Input value={content.contacts.logoPath} onChange={(e) => updateContent({ ...content, contacts: { ...content.contacts, logoPath: e.target.value } })} />
-        </div>
-
-        <div className="border-t pt-4">
-          <h4 className="font-semibold mb-2">SEO / Meta</h4>
-          <Input className="mb-2" value={content.seo.title} onChange={(e) => updateContent({ ...content, seo: { ...content.seo, title: e.target.value } })} placeholder="Title" />
-          <Textarea className="mb-2" value={content.seo.description} onChange={(e) => updateContent({ ...content, seo: { ...content.seo, description: e.target.value } })} placeholder="Description" />
-          <Input className="mb-2" value={content.seo.keywords} onChange={(e) => updateContent({ ...content, seo: { ...content.seo, keywords: e.target.value } })} placeholder="Keywords" />
-          <Input className="mb-2" value={content.seo.ogTitle} onChange={(e) => updateContent({ ...content, seo: { ...content.seo, ogTitle: e.target.value } })} placeholder="OG Title" />
-          <Textarea className="mb-2" value={content.seo.ogDescription} onChange={(e) => updateContent({ ...content, seo: { ...content.seo, ogDescription: e.target.value } })} placeholder="OG Description" />
-          <Input value={content.seo.ogImage} onChange={(e) => updateContent({ ...content, seo: { ...content.seo, ogImage: e.target.value } })} placeholder="OG image" />
-        </div>
-
-        <div className="border-t pt-4">
-          <h4 className="font-semibold mb-2">Yandex карта: объекты (JSON)</h4>
-          <Textarea rows={10} value={jsonDraft} onChange={(e) => setJsonDraft(e.target.value)} />
-          <Button className="mt-2" onClick={onMapObjectsSave}>Сохранить объекты</Button>
-        </div>
-
-        <div className="border-t pt-4 space-x-2">
-          <Button variant="destructive" onClick={resetContent}>Сбросить дефолт</Button>
-          <Button variant="outline" onClick={() => navigator.clipboard.writeText(formattedJson)}>Скопировать JSON</Button>
+          <label className="text-sm font-medium">Hero заголовок</label>
+          <Input value={content.hero.title} onChange={(e) => updateContent({ ...content, hero: { ...content.hero, title: e.target.value } })} />
         </div>
       </div>
-    </aside>
+
+      <div className="mb-4">
+        <label className="text-sm font-medium">Полный JSON контента (включая цены и всю текстовку)</label>
+        <Textarea rows={24} value={jsonDraft} onChange={(e) => setJsonDraft(e.target.value)} className="font-mono text-xs" />
+      </div>
+
+      <div className="flex flex-wrap gap-2 mb-6">
+        <Button onClick={saveJson}>Сохранить JSON</Button>
+        <Button variant="outline" onClick={() => setJsonDraft(pretty)}>Обновить из текущего</Button>
+        <Button variant="outline" onClick={() => navigator.clipboard.writeText(pretty)}>Скопировать JSON</Button>
+        <Button variant="destructive" onClick={resetContent}>Сбросить в дефолт</Button>
+      </div>
+    </div>
   );
 }

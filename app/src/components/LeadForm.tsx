@@ -14,6 +14,16 @@ interface LeadFormProps {
 
 const PHONE_REGEX = /^(\+7|8)\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
 
+function formatPhone(value: string) {
+  const digits = value.replace(/\D/g, '').replace(/^8/, '7').replace(/^7?/, '7').slice(0, 11);
+  const p = digits.slice(1);
+  if (!digits) return '';
+  if (p.length <= 3) return `+7 (${p}`;
+  if (p.length <= 6) return `+7 (${p.slice(0, 3)}) ${p.slice(3)}`;
+  if (p.length <= 8) return `+7 (${p.slice(0, 3)}) ${p.slice(3, 6)}-${p.slice(6)}`;
+  return `+7 (${p.slice(0, 3)}) ${p.slice(3, 6)}-${p.slice(6, 8)}-${p.slice(8, 10)}`;
+}
+
 export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadFormProps) {
   const { content } = useSiteContent();
   const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
@@ -59,7 +69,7 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
               type="tel"
               placeholder="+7 (999) 999-99-99"
               value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              onChange={(e) => setFormData({ ...formData, phone: formatPhone(e.target.value) })}
               pattern="(\\+7|8)\\s?\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{2}[\\s-]?\\d{2}"
               title="Введите телефон в формате +7 (999) 999-99-99"
               className={`pl-12 py-6 rounded-xl ${inputClass}`}

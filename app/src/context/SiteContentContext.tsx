@@ -23,6 +23,8 @@ function getInitialContent(): SiteContent {
       contacts: { ...defaultSiteContent.contacts, ...parsed.contacts },
       hero: { ...defaultSiteContent.hero, ...parsed.hero },
       seo: { ...defaultSiteContent.seo, ...parsed.seo },
+      ready: { ...defaultSiteContent.ready, ...parsed.ready, duplexes: parsed.ready?.duplexes ?? defaultSiteContent.ready.duplexes },
+      construction: { ...defaultSiteContent.construction, ...parsed.construction, duplexes: parsed.construction?.duplexes ?? defaultSiteContent.construction.duplexes },
       map: {
         ...defaultSiteContent.map,
         ...parsed.map,
