@@ -3,6 +3,7 @@ import { LeadForm } from '@/components/LeadForm';
 import { Check, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useSiteContent } from '@/context/SiteContentContext';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -20,6 +21,7 @@ const staggerContainer = {
 
 export function Hero() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { content } = useSiteContent();
 
   const navLinks = [
     { href: '#advantages', label: 'Преимущества' },
@@ -35,7 +37,7 @@ export function Hero() {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/images/hero-duplex.jpg"
+          src={content.hero.heroImage}
           alt="Яркий дуплекс"
           className="w-full h-full object-cover"
         />
@@ -46,7 +48,7 @@ export function Hero() {
       <nav className="absolute top-0 left-0 right-0 z-50 py-4 px-4 md:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="text-white font-bold text-xl md:text-2xl">
-            <span className="text-orange">Дуплекс</span>-Строй
+            <img src={content.contacts.logoPath} alt={content.contacts.companyName} className="h-10 w-auto rounded bg-white/80 p-1" />
           </div>
           
           {/* Desktop Nav */}
@@ -63,8 +65,8 @@ export function Hero() {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
-            <a href="tel:+78001234567" className="text-white font-bold">
-              8 (800) 123-45-67
+            <a href={`tel:${content.contacts.phoneHref}`} className="text-white font-bold">
+              {content.contacts.phoneDisplay}
             </a>
           </div>
 
@@ -114,15 +116,14 @@ export function Hero() {
               variants={fadeInUp}
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6"
             >
-              Яркие дуплексы для{' '}
-              <span className="text-orange">счастливой жизни</span> от застройщика!
+              {content.hero.title}
             </motion.h1>
 
             <motion.p
               variants={fadeInUp}
               className="text-lg md:text-xl text-white/80 mb-8"
             >
-              Собственное производство материалов • Ипотека от 4,9% • Отделка под ключ
+              {content.hero.subtitle}
             </motion.p>
 
             <motion.div variants={fadeInUp} className="flex flex-wrap gap-4 mb-8">
