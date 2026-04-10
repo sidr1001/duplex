@@ -3,24 +3,32 @@ import { AdminPanel } from '@/components/AdminPanel';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { useSiteContent } from '@/context/SiteContentContext';
 
-const ADMIN_LOGIN = 'admin';
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'duplex-admin-2026';
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 const SESSION_KEY = 'duplex-admin-auth';
 
 export function AdminPage() {
+  const { content } = useSiteContent();
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [authorized, setAuthorized] = useState(() => sessionStorage.getItem(SESSION_KEY) === '1');
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (login === ADMIN_LOGIN && password === ADMIN_PASSWORD) {
+
+    if (!ADMIN_PASSWORD) {
+      toast.error('VITE_ADMIN_PASSWORD не задан в .env');
+      return;
+    }
+
+    if (login === content.admin.login && password === ADMIN_PASSWORD) {
       sessionStorage.setItem(SESSION_KEY, '1');
       setAuthorized(true);
       toast.success('Доступ разрешен');
       return;
     }
+
     toast.error('Неверный логин или пароль');
   };
 

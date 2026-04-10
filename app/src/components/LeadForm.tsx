@@ -13,6 +13,7 @@ interface LeadFormProps {
 }
 
 const PHONE_REGEX = /^(\+7|8)\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function formatPhone(value: string) {
   const digits = value.replace(/\D/g, '').replace(/^8/, '7').replace(/^7?/, '7').slice(0, 11);
@@ -33,6 +34,11 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
     e.preventDefault();
     if (fields.includes('phone') && !PHONE_REGEX.test(formData.phone)) {
       toast.error('Проверьте формат телефона. Пример: +7 (999) 999-99-99');
+      return;
+    }
+
+    if (fields.includes('email') && !EMAIL_REGEX.test(formData.email)) {
+      toast.error('Проверьте формат email. Пример: user@example.com');
       return;
     }
 
@@ -67,6 +73,7 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
             <Phone className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${variant === 'light' ? 'text-gray-400' : 'text-white/60'}`} />
             <Input
               type="tel"
+              inputMode="tel"
               placeholder="+7 (999) 999-99-99"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: formatPhone(e.target.value) })}
@@ -81,7 +88,7 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
         {fields.includes('email') && (
           <div className="relative">
             <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${variant === 'light' ? 'text-gray-400' : 'text-white/60'}`} />
-            <Input type="email" placeholder="Ваш email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className={`pl-12 py-6 rounded-xl ${inputClass}`} required />
+            <Input type="email" placeholder="Ваш email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value.trim() })} pattern="[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}" title="Введите email в формате user@example.com" className={`pl-12 py-6 rounded-xl ${inputClass}`} required />
           </div>
         )}
 

@@ -23,6 +23,10 @@ function getInitialContent(): SiteContent {
       contacts: { ...defaultSiteContent.contacts, ...parsed.contacts },
       hero: { ...defaultSiteContent.hero, ...parsed.hero },
       seo: { ...defaultSiteContent.seo, ...parsed.seo },
+      admin: { ...defaultSiteContent.admin, ...parsed.admin },
+      socials: { ...defaultSiteContent.socials, ...parsed.socials },
+      sections: { ...defaultSiteContent.sections, ...parsed.sections },
+      footer: { ...defaultSiteContent.footer, ...parsed.footer, footerLinks: parsed.footer?.footerLinks ?? defaultSiteContent.footer.footerLinks },
       ready: { ...defaultSiteContent.ready, ...parsed.ready, duplexes: parsed.ready?.duplexes ?? defaultSiteContent.ready.duplexes },
       construction: { ...defaultSiteContent.construction, ...parsed.construction, duplexes: parsed.construction?.duplexes ?? defaultSiteContent.construction.duplexes },
       map: {

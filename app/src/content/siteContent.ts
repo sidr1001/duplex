@@ -41,6 +41,40 @@ export interface SiteContent {
     workHours: string;
     logoPath: string;
   };
+  admin: {
+    login: string;
+  };
+  socials: {
+    whatsapp: string;
+    telegram: string;
+    instagram: string;
+    max: string;
+  };
+  sections: {
+    hero: boolean;
+    advantages: boolean;
+    about: boolean;
+    ready: boolean;
+    construction: boolean;
+    mortgage: boolean;
+    reviews: boolean;
+    steps: boolean;
+    guarantees: boolean;
+    map: boolean;
+    finalCta: boolean;
+  };
+  footer: {
+    description: string;
+    orgName: string;
+    orgDetails: string;
+    declarationLinkText: string;
+    declarationLink: string;
+    privacyLinkText: string;
+    privacyLink: string;
+    sectionsTitle: string;
+    contactsTitle: string;
+    footerLinks: Array<{ label: string; href: string }>;
+  };
   seo: {
     title: string;
     description: string;
@@ -53,6 +87,9 @@ export interface SiteContent {
     title: string;
     subtitle: string;
     heroImage: string;
+    navLinks: Array<{ href: string; label: string }>;
+    catalogFormTitle: string;
+    catalogFormButtonText: string;
   };
   ready: {
     title: string;
@@ -90,6 +127,48 @@ export const defaultSiteContent: SiteContent = {
     workHours: 'Пн-Пт: 9:00 - 19:00',
     logoPath: '/images/logo.svg'
   },
+  admin: {
+    login: import.meta.env.VITE_ADMIN_LOGIN || 'admin'
+  },
+  socials: {
+    whatsapp: 'https://wa.me/78001234567',
+    telegram: 'https://t.me/duplexstroy',
+    instagram: 'https://instagram.com/duplexstroy',
+    max: 'https://max.ru/duplexstroy'
+  },
+  sections: {
+    hero: true,
+    advantages: true,
+    about: true,
+    ready: true,
+    construction: true,
+    mortgage: true,
+    reviews: true,
+    steps: true,
+    guarantees: true,
+    map: true,
+    finalCta: true
+  },
+  footer: {
+    description: 'Строим яркие дуплексы для счастливой жизни с 2009 года. Собственное производство, все льготные ипотеки, отделка под ключ.',
+    orgName: 'ООО «Дуплекс-Строй»',
+    orgDetails: 'ИНН 7700000000 • ОГРН 1027700000000 • г. Москва, ул. Строителей, 25',
+    declarationLinkText: 'Проектная декларация',
+    declarationLink: '#',
+    privacyLinkText: 'Политика конфиденциальности',
+    privacyLink: '#',
+    sectionsTitle: 'Разделы',
+    contactsTitle: 'Контакты',
+    footerLinks: [
+      { label: 'Преимущества', href: '#advantages' },
+      { label: 'О компании', href: '#about' },
+      { label: 'Готовые дуплексы', href: '#ready' },
+      { label: 'В строительстве', href: '#construction' },
+      { label: 'Ипотека', href: '#mortgage' },
+      { label: 'Отзывы', href: '#reviews' },
+      { label: 'Карта', href: '#map' }
+    ]
+  },
   seo: {
     title: 'Яркие дуплексы от застройщика | Дуплекс-Строй',
     description: 'Готовые и строящиеся дуплексы с ипотекой и отделкой под ключ. Запишитесь на просмотр.',
@@ -101,7 +180,17 @@ export const defaultSiteContent: SiteContent = {
   hero: {
     title: 'Яркие дуплексы для счастливой жизни от застройщика!',
     subtitle: 'Собственное производство материалов • Ипотека от 4,9% • Отделка под ключ',
-    heroImage: '/images/hero-duplex.jpg'
+    heroImage: '/images/hero-duplex.jpg',
+    navLinks: [
+      { href: '#advantages', label: 'Преимущества' },
+      { href: '#about', label: 'О компании' },
+      { href: '#ready', label: 'Готовые дуплексы' },
+      { href: '#construction', label: 'В строительстве' },
+      { href: '#mortgage', label: 'Ипотека' },
+      { href: '#reviews', label: 'Отзывы' }
+    ],
+    catalogFormTitle: 'Получить каталог проектов + актуальные цены',
+    catalogFormButtonText: 'Скачать каталог'
   },
   ready: {
     title: 'Готовые дуплексы — заезжайте и живите!',
