@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Duplex — HTML+CSS+JS шаблон</title>
+  <meta name="description" content="Полная статическая копия лендинга: HTML + CSS + JS без сборки." />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="hero" id="top">
+    <nav class="nav container">
+      <a class="brand" href="#top">
+        <img src="../public/images/logo.svg" alt="Логотип Duplex" class="logo" />
+        <span>Дуплекс-Строй</span>
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-label="Открыть меню">☰</button>
+      <div class="menu" id="menu">
+        <a href="#advantages">Преимущества</a>
+        <a href="#ready">Готовые</a>
+        <a href="#construction">Строящиеся</a>
+        <a href="#contacts">Контакты</a>
+      </div>
+    </nav>
+
+    <div class="container hero-content">
+      <h1>Яркие дуплексы для счастливой жизни</h1>
+      <p>Готовая «текучая» копия шаблона на чистом HTML+CSS+JS, которую можно сразу редактировать и выкладывать на хостинг.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#lead">Получить каталог</a>
+        <a class="btn btn-ghost" href="#ready">Смотреть варианты</a>
+      </div>
+      <ul class="badges">
+        <li>2000+ объектов</li>
+        <li>С 2009 года</li>
+        <li>Ипотека от 4.9%</li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section id="advantages" class="section container">
+      <h2>Почему выбирают нас</h2>
+      <div class="grid grid-3" id="advantagesGrid"></div>
+    </section>
+
+    <section id="ready" class="section section-soft">
+      <div class="container">
+        <h2>Готовые дуплексы</h2>
+        <div class="grid grid-3" id="readyGrid"></div>
+      </div>
+    </section>
+
+    <section id="construction" class="section container">
+      <h2>В строительстве</h2>
+      <div class="grid grid-2" id="constructionGrid"></div>
+    </section>
+
+    <section id="lead" class="section section-cta">
+      <div class="container lead-wrap">
+        <div>
+          <h2>Оставьте заявку</h2>
+          <p>Перезвоним и подберем лучший вариант под ваш бюджет.</p>
+        </div>
+        <form id="leadForm" class="lead-form" novalidate>
+          <input type="text" name="name" placeholder="Ваше имя" required />
+          <input type="tel" name="phone" placeholder="+7 (___) ___-__-__" required />
+          <input type="email" name="email" placeholder="name@example.com" required />
+          <button class="btn btn-primary" type="submit">Отправить заявку</button>
+          <small id="formMsg"></small>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contacts" class="footer">
+    <div class="container footer-grid">
+      <div>
+        <h3>Дуплекс-Строй</h3>
+        <p>Строим современные дуплексы с продуманной архитектурой и честными ценами.</p>
+      </div>
+      <div>
+        <h4>Контакты</h4>
+        <p><a href="tel:+78001234567">8 (800) 123-45-67</a></p>
+        <p><a href="mailto:info@duplexstroy.ru">info@duplexstroy.ru</a></p>
+      </div>
+      <div>
+        <h4>Соцсети</h4>
+        <p><a href="#">WhatsApp</a> · <a href="#">Telegram</a> · <a href="#">Instagram</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>

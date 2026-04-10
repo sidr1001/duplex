@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { LeadForm } from '@/components/LeadForm';
 import { Clock, Gift, FileCheck, Phone } from 'lucide-react';
+import { useSiteContent } from '@/context/SiteContentContext';
 
 const triggers = [
   {
@@ -18,6 +19,7 @@ const triggers = [
 ];
 
 export function FinalCTA() {
+  const { content } = useSiteContent();
   return (
     <section className="relative py-20 md:py-32 overflow-hidden">
       {/* Animated Gradient Background */}
@@ -83,7 +85,7 @@ export function FinalCTA() {
 
             {/* Phone */}
             <motion.a
-              href="tel:+78001234567"
+              href={`tel:${content.contacts.phoneHref}`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -93,7 +95,7 @@ export function FinalCTA() {
               <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
                 <Phone className="w-6 h-6" />
               </div>
-              8 (800) 123-45-67
+              {content.contacts.phoneDisplay}
             </motion.a>
           </motion.div>
 

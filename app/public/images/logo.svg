@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 120" role="img" aria-label="Duplex logo">
+  <rect width="360" height="120" rx="20" fill="#1A1A2E"/>
+  <rect x="24" y="26" width="68" height="68" rx="10" fill="#FF6B35"/>
+  <rect x="102" y="18" width="68" height="76" rx="10" fill="#6FCED8"/>
+  <rect x="180" y="34" width="68" height="60" rx="10" fill="#FFD93D"/>
+  <text x="262" y="74" font-size="34" fill="white" font-family="Arial, sans-serif" font-weight="700">D</text>
+</svg>

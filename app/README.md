@@ -1,73 +1,58 @@
-# React + TypeScript + Vite
+# Duplex Landing (React + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Что реализовано
+- Редактируемая мини-админка контента (кнопка **«Админка»** на странице):
+  - контакты, телефоны, email;
+  - email получателя заявок из форм;
+  - SEO/meta (title, description, keywords, OG);
+  - точки объектов для Яндекс.Карты (JSON).
+- Валидация телефона во всех формах (`+7 (999) 999-99-99` / `8XXXXXXXXXX`).
+- Карта Яндекс с локализацией объектов.
+- Добавлен лаконичный `logo.svg` и встроен в сайт.
+- Добавлен дополнительный шаблон `template/` (HTML+CSS+JS).
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Запуск локально
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Сборка
+```bash
+npm run build
 ```
+Готовый продакшен-бандл появится в `dist/`.
+
+## Проверка сборки локально
+```bash
+npm run preview
+```
+
+## Как выложить на хостинг
+
+### Вариант 1: обычный статический хостинг (Nginx, Apache, Timeweb, Beget и т.д.)
+1. Выполнить `npm run build`.
+2. Загрузить содержимое папки `dist/` в корень сайта (`public_html`/`www`).
+3. Для SPA добавить правило fallback на `index.html`.
+
+Пример для **Nginx**:
+```nginx
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+
+### Вариант 2: Vercel / Netlify
+- Build command: `npm run build`
+- Publish directory: `dist`
+
+## Админка
+- Админка доступна на отдельной странице: `/admin`.
+- Вход только для администратора (логин: `admin`, пароль из `VITE_ADMIN_PASSWORD`, по умолчанию `duplex-admin-2026`).
+- После входа можно править весь JSON контента (включая цены, текстовки, контакты, SEO и точки карты).
+- Все изменения сохраняются в `localStorage` браузера.
+- Кнопка «Сбросить в дефолт» возвращает стартовые значения.
+
+## Доп. шаблон
+- Файлы: `template/index.html`, `template/styles.css`, `template/script.js`.
+- Можно открыть напрямую в браузере как отдельный мини-лендинг.
