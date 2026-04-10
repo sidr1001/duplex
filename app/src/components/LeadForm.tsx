@@ -13,7 +13,7 @@ interface LeadFormProps {
 }
 
 const PHONE_REGEX = /^(\+7|8)\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 function formatPhone(value: string) {
   const digits = value.replace(/\D/g, '').replace(/^8/, '7').replace(/^7?/, '7').slice(0, 11);
@@ -37,7 +37,8 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
       return;
     }
 
-    if (fields.includes('email') && !EMAIL_REGEX.test(formData.email)) {
+    const normalizedEmail = formData.email.trim();
+    if (fields.includes('email') && !EMAIL_REGEX.test(normalizedEmail)) {
       toast.error('Проверьте формат email. Пример: user@example.com');
       return;
     }
@@ -45,7 +46,7 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
     setIsSubmitting(true);
     await new Promise(resolve => setTimeout(resolve, 600));
 
-    const body = `Имя: ${formData.name || '-'}%0AТелефон: ${formData.phone || '-'}%0AEmail: ${formData.email || '-'}%0AИсточник: сайт`;
+    const body = `Имя: ${formData.name || '-'}%0AТелефон: ${formData.phone || '-'}%0AEmail: ${normalizedEmail || '-'}%0AИсточник: сайт`;
     window.location.href = `mailto:${content.contacts.leadRecipientEmail}?subject=Новая заявка с сайта&body=${body}`;
 
     toast.success(`Заявка сформирована. Письмо будет отправлено на ${content.contacts.leadRecipientEmail}`);
@@ -88,7 +89,7 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
         {fields.includes('email') && (
           <div className="relative">
             <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${variant === 'light' ? 'text-gray-400' : 'text-white/60'}`} />
-            <Input type="email" placeholder="Ваш email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value.trim() })} pattern="[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}" title="Введите email в формате user@example.com" className={`pl-12 py-6 rounded-xl ${inputClass}`} required />
+            <Input type="email" placeholder="Ваш email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} pattern="[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}" title="Введите email в формате user@example.com" className={`pl-12 py-6 rounded-xl ${inputClass}`} required />
           </div>
         )}
 

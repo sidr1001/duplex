@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useSiteContent } from '@/context/SiteContentContext';
+import { Toaster } from '@/components/ui/sonner';
 
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 const SESSION_KEY = 'duplex-admin-auth';
@@ -34,7 +35,8 @@ export function AdminPage() {
 
   if (!authorized) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <>
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <form onSubmit={onSubmit} className="w-full max-w-md bg-white rounded-2xl shadow-card p-6 space-y-4">
           <h1 className="text-2xl font-bold">Вход в админку</h1>
           <p className="text-dark-light text-sm">Доступ только для администратора.</p>
@@ -42,7 +44,9 @@ export function AdminPage() {
           <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Пароль" required />
           <Button type="submit" className="w-full">Войти</Button>
         </form>
-      </div>
+        </div>
+        <Toaster />
+      </>
     );
   }
 
@@ -58,6 +62,7 @@ export function AdminPage() {
         </div>
       </div>
       <AdminPanel />
+      <Toaster />
     </div>
   );
 }

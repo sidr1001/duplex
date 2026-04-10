@@ -11,22 +11,23 @@ function stripJsonComments(source: string) {
     .replace(/(^|\s)\/\/.*$/gm, '$1');
 }
 
-const JSON_HINT = `{
-  // можно добавлять комментарии через //
-  // sections: скрытие/показ любого блока лендинга
-  // socials: whatsapp, telegram, instagram, max
-  // footer: описание и реквизиты организации
-}`;
+const JSON_HINT_LINES = [
+  '// Подсказка: можно добавлять комментарии через // и блоки /* */',
+  '// sections: скрытие/показ любого блока лендинга',
+  '// socials: whatsapp, telegram, instagram, max',
+  '// footer: описание и реквизиты организации',
+  ''
+].join('\n');
 
 export function AdminPanel() {
   const { content, updateContent, resetContent } = useSiteContent();
-  const [jsonDraft, setJsonDraft] = useState(() => `${JSON_HINT}\n${JSON.stringify(content, null, 2)}`);
+  const [jsonDraft, setJsonDraft] = useState(() => `${JSON_HINT_LINES}${JSON.stringify(content, null, 2)}`);
 
   const pretty = useMemo(() => JSON.stringify(content, null, 2), [content]);
 
   const saveJson = () => {
     try {
-      const cleanJson = stripJsonComments(jsonDraft.substring(jsonDraft.indexOf('{')));
+      const cleanJson = stripJsonComments(jsonDraft).trim();
       const parsed = JSON.parse(cleanJson) as SiteContent;
       updateContent(parsed);
       toast.success('Контент обновлен');
@@ -47,7 +48,7 @@ export function AdminPanel() {
 
       <div className="flex flex-wrap gap-2 mb-6">
         <Button onClick={saveJson}>Сохранить JSON</Button>
-        <Button variant="outline" onClick={() => setJsonDraft(`${JSON_HINT}\n${pretty}`)}>Обновить из текущего</Button>
+        <Button variant="outline" onClick={() => setJsonDraft(`${JSON_HINT_LINES}${pretty}`)}>Обновить из текущего</Button>
         <Button variant="outline" onClick={() => navigator.clipboard.writeText(pretty)}>Скопировать JSON</Button>
         <Button variant="destructive" onClick={resetContent}>Сбросить в дефолт</Button>
       </div>
