@@ -4,23 +4,11 @@
 - Редактируемая админка контента через JSON.
 - Валидация телефона и email в лид-формах.
 - Готовые дуплексы со слайдером изображений в карточке и модальном окне.
-- Отправка заявок через собственный API endpoint `/api/send-lead` (SMTP), без сторонних сервисов.
+- Отправка заявок через `send-lead.php` + SMTP (PHPMailer), без отдельного Node API.
 
-## Запуск локально
-1) Установить зависимости:
+## Локальная разработка фронтенда
 ```bash
 npm install
-```
-
-2) Создать `.env` на основе `.env.example` и заполнить SMTP параметры.
-
-3) Запустить API:
-```bash
-npm run api
-```
-
-4) В отдельном терминале запустить фронтенд:
-```bash
 npm run dev
 ```
 
@@ -29,19 +17,26 @@ npm run dev
 npm run build
 ```
 
+## Запуск на обычном PHP-хостинге
+1. Выполните `npm run build`.
+2. Загрузите **содержимое** папки `dist/` в корень сайта.
+3. Убедитесь, что на хостинге есть PHP и Composer.
+4. В папке `public/` (или в корне сайта после деплоя) выполните:
+   ```bash
+   composer require phpmailer/phpmailer
+   ```
+5. Настройте SMTP переменные окружения на хостинге:
+   - `SMTP_HOST`
+   - `SMTP_PORT`
+   - `SMTP_SECURE`
+   - `SMTP_USER`
+   - `SMTP_PASS`
+6. Проверьте, что файл `send-lead.php` доступен по адресу `https://ваш-домен/send-lead.php`.
+
+> Отдельно `npm run api` запускать **не нужно** — отправка идет через PHP endpoint.
+
 ## Админка
 - Путь задается через `VITE_ADMIN_PATH` (по умолчанию `/admin`).
 - Логин: `VITE_ADMIN_LOGIN`.
 - Пароль: `VITE_ADMIN_PASSWORD`.
 - В админке можно редактировать весь JSON контента (включая `ready.duplexes[].images` и `ready.duplexes[].description`).
-
-## SMTP / API
-Используются переменные окружения:
-- `API_PORT`
-- `SMTP_HOST`
-- `SMTP_PORT`
-- `SMTP_SECURE`
-- `SMTP_USER`
-- `SMTP_PASS`
-
-Endpoint: `POST /api/send-lead`

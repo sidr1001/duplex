@@ -47,7 +47,7 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/send-lead', {
+      const response = await fetch('send-lead.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
@@ -65,7 +65,7 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
       toast.success(`Заявка отправлена на ${content.contacts.leadRecipientEmail}`);
       setFormData({ name: '', phone: '', email: '' });
     } catch {
-      toast.error('Не удалось отправить заявку. Проверьте SMTP/API настройки сервера.');
+      toast.error('Не удалось отправить заявку. Проверьте send-lead.php и SMTP настройки.');
     } finally {
       setIsSubmitting(false);
     }
