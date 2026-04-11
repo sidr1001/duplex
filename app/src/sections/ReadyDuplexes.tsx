@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { LeadForm } from '@/components/LeadForm';
-import { Bed, Bath, Maximize, Check } from 'lucide-react';
+import { Bed, Bath, Maximize, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSiteContent } from '@/context/SiteContentContext';
+import type { ReadyDuplex } from '@/content/siteContent';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -27,6 +29,52 @@ const itemVariants = {
     }
   }
 };
+
+function getReadyImages(duplex: ReadyDuplex) {
+  if (duplex.images?.length) return duplex.images;
+  if (duplex.image) return [duplex.image];
+  return [];
+}
+
+function DuplexImageSlider({ duplex, className }: { duplex: ReadyDuplex; className: string }) {
+  const images = getReadyImages(duplex);
+  const [index, setIndex] = useState(0);
+
+  const next = () => setIndex((prev) => (prev + 1) % images.length);
+  const prev = () => setIndex((prev) => (prev - 1 + images.length) % images.length);
+
+  if (!images.length) {
+    return <div className={`${className} bg-gray-100`} />;
+  }
+
+  return (
+    <div className={`relative overflow-hidden ${className}`}>
+      <img src={images[index]} alt={`${duplex.name} ${index + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+
+      {images.length > 1 && (
+        <>
+          <button type="button" onClick={prev} className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-1 text-white hover:bg-black/60" aria-label="Предыдущее изображение">
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button type="button" onClick={next} className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-1 text-white hover:bg-black/60" aria-label="Следующее изображение">
+            <ChevronRight className="h-5 w-5" />
+          </button>
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {images.map((_, dotIndex) => (
+              <button
+                key={dotIndex}
+                type="button"
+                onClick={() => setIndex(dotIndex)}
+                className={`h-2 w-2 rounded-full ${index === dotIndex ? 'bg-white' : 'bg-white/50'}`}
+                aria-label={`Перейти к изображению ${dotIndex + 1}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 export function ReadyDuplexes() {
   const { content } = useSiteContent();
@@ -55,7 +103,7 @@ export function ReadyDuplexes() {
           {content.ready.duplexes.map((duplex) => (
             <motion.div key={duplex.id} variants={itemVariants} className="bg-white rounded-3xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-300 border border-gray-100">
               <div className="relative h-56 md:h-64 overflow-hidden">
-                <img src={duplex.image} alt={duplex.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                <DuplexImageSlider duplex={duplex} className="h-full w-full" />
                 <Badge className="absolute top-4 left-4 bg-green text-white border-0">{duplex.status}</Badge>
               </div>
 
@@ -78,7 +126,7 @@ export function ReadyDuplexes() {
                   <DialogContent className="max-w-3xl">
                     <DialogHeader><DialogTitle className="text-2xl">{duplex.name} — Планировка</DialogTitle></DialogHeader>
                     <div className="grid md:grid-cols-2 gap-6">
-                      <img src={duplex.image} alt={duplex.name} className="w-full h-64 object-cover rounded-xl" />
+                      <DuplexImageSlider duplex={duplex} className="w-full h-64 rounded-xl" />
                       <div>
                         <h4 className="font-bold text-lg mb-3">Характеристики:</h4>
                         <ul className="space-y-2 text-dark-light">

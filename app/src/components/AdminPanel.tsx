@@ -16,6 +16,7 @@ const JSON_HINT_LINES = [
   '// sections: скрытие/показ любого блока лендинга',
   '// socials: whatsapp, telegram, instagram, max',
   '// footer: описание и реквизиты организации',
+  '// ready.duplexes[].images: массив изображений для слайдера',
   ''
 ].join('\n');
 
