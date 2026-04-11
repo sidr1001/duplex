@@ -47,15 +47,14 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${content.contacts.leadRecipientEmail}`, {
+      const response = await fetch('/api/send-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
           name: formData.name || 'Без имени',
           phone: formData.phone || 'Не указан',
           email: normalizedEmail || 'Не указан',
-          message: 'Новая заявка с сайта',
-          _subject: 'Новая заявка с лендинга'
+          recipientEmail: content.contacts.leadRecipientEmail
         })
       });
 
@@ -66,7 +65,7 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
       toast.success(`Заявка отправлена на ${content.contacts.leadRecipientEmail}`);
       setFormData({ name: '', phone: '', email: '' });
     } catch {
-      toast.error('Не удалось отправить заявку. Проверьте email получателя в админке.');
+      toast.error('Не удалось отправить заявку. Проверьте SMTP/API настройки сервера.');
     } finally {
       setIsSubmitting(false);
     }
