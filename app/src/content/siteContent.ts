@@ -13,6 +13,7 @@ export interface ReadyDuplex {
   bathrooms: number;
   price: string;
   status: string;
+  description: string;
   images: string[];
   image?: string;
   features: string[];
@@ -210,6 +211,7 @@ export const defaultSiteContent: SiteContent = {
         bathrooms: 2,
         price: '8 500 000',
         status: 'Готов к заселению',
+        description: 'Светлый дуплекс с панорамными окнами и готовой террасой.',
         images: ['/images/duplex-sunny.jpg', '/images/review-1.jpg', '/images/review-2.jpg'],
         features: ['Панорамные окна', 'Терраса', 'Гараж на 2 авто']
       },
@@ -221,6 +223,7 @@ export const defaultSiteContent: SiteContent = {
         bathrooms: 2,
         price: '9 800 000',
         status: 'Готов к заселению',
+        description: 'Современный проект с двухуровневой планировкой и зоной камина.',
         images: ['/images/duplex-bright.jpg', '/images/review-3.jpg', '/images/review-4.jpg'],
         features: ['Двухуровневый', 'Сад', 'Камин']
       },
@@ -232,6 +235,7 @@ export const defaultSiteContent: SiteContent = {
         bathrooms: 3,
         price: '11 200 000',
         status: 'Готов к заселению',
+        description: 'Просторный семейный формат с отдельным кабинетом и зоной отдыха.',
         images: ['/images/duplex-family.jpg', '/images/family-happy.jpg', '/images/team.jpg'],
         features: ['Бассейн', 'Детская площадка', 'Офис']
       }

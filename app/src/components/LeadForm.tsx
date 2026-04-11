@@ -32,6 +32,7 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (fields.includes('phone') && !PHONE_REGEX.test(formData.phone)) {
       toast.error('Проверьте формат телефона. Пример: +7 (999) 999-99-99');
       return;
@@ -44,14 +45,31 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
     }
 
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 600));
 
-    const body = `Имя: ${formData.name || '-'}%0AТелефон: ${formData.phone || '-'}%0AEmail: ${normalizedEmail || '-'}%0AИсточник: сайт`;
-    window.location.href = `mailto:${content.contacts.leadRecipientEmail}?subject=Новая заявка с сайта&body=${body}`;
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${content.contacts.leadRecipientEmail}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: formData.name || 'Без имени',
+          phone: formData.phone || 'Не указан',
+          email: normalizedEmail || 'Не указан',
+          message: 'Новая заявка с сайта',
+          _subject: 'Новая заявка с лендинга'
+        })
+      });
 
-    toast.success(`Заявка сформирована. Письмо будет отправлено на ${content.contacts.leadRecipientEmail}`);
-    setFormData({ name: '', phone: '', email: '' });
-    setIsSubmitting(false);
+      if (!response.ok) {
+        throw new Error('send_failed');
+      }
+
+      toast.success(`Заявка отправлена на ${content.contacts.leadRecipientEmail}`);
+      setFormData({ name: '', phone: '', email: '' });
+    } catch {
+      toast.error('Не удалось отправить заявку. Проверьте email получателя в админке.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const bgClass = { light: 'bg-white', dark: 'bg-dark/90', gradient: 'bg-gradient-to-br from-orange/90 to-turquoise/90' }[variant];

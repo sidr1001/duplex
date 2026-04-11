@@ -108,7 +108,8 @@ export function ReadyDuplexes() {
               </div>
 
               <div className="p-6">
-                <h3 className="text-xl font-bold text-dark mb-3">{duplex.name}</h3>
+                <h3 className="text-xl font-bold text-dark mb-2">{duplex.name}</h3>
+                <p className="text-sm text-dark-light mb-3">{duplex.description}</p>
                 <div className="flex flex-wrap gap-4 mb-4 text-dark-light text-sm">
                   <div className="flex items-center gap-1"><Maximize className="w-4 h-4" /><span>{duplex.area} м²</span></div>
                   <div className="flex items-center gap-1"><Bed className="w-4 h-4" /><span>{duplex.bedrooms} спальни</span></div>
@@ -123,18 +124,44 @@ export function ReadyDuplexes() {
 
                 <Dialog>
                   <DialogTrigger asChild><Button className="w-full bg-turquoise hover:bg-turquoise-dark text-white font-semibold rounded-xl">{content.ready.openPlanButtonText}</Button></DialogTrigger>
-                  <DialogContent className="max-w-3xl">
-                    <DialogHeader><DialogTitle className="text-2xl">{duplex.name} — Планировка</DialogTitle></DialogHeader>
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <DuplexImageSlider duplex={duplex} className="w-full h-64 rounded-xl" />
-                      <div>
-                        <h4 className="font-bold text-lg mb-3">Характеристики:</h4>
-                        <ul className="space-y-2 text-dark-light">
-                          <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green" />Площадь: {duplex.area} м²</li>
-                          <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green" />Спален: {duplex.bedrooms}</li>
-                          <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green" />Санузлов: {duplex.bathrooms}</li>
-                          {duplex.features.map((feature, idx) => <li key={idx} className="flex items-center gap-2"><Check className="w-4 h-4 text-green" />{feature}</li>)}
+                  <DialogContent className="max-w-[95vw] sm:max-w-4xl md:max-w-6xl max-h-[90vh] overflow-y-auto p-6 md:p-8">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl md:text-3xl font-bold">{duplex.name} — Планировка</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 items-start">
+                      <div className="md:col-span-3">
+                        <DuplexImageSlider duplex={duplex} className="w-full h-72 md:h-[500px] rounded-xl" />
+                      </div>
+
+                      <div className="md:col-span-1 space-y-4 md:sticky md:top-4">
+                        <h4 className="font-bold text-lg">Характеристики:</h4>
+                        <ul className="space-y-3 text-dark-light">
+                          <li className="flex items-center gap-2">
+                            <Check className="w-5 h-5 text-green shrink-0" />
+                            Площадь: {duplex.area} м²
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <Check className="w-5 h-5 text-green shrink-0" />
+                            Спален: {duplex.bedrooms}
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <Check className="w-5 h-5 text-green shrink-0" />
+                            Санузлов: {duplex.bathrooms}
+                          </li>
+                          {duplex.features.map((feature, idx) => (
+                            <li key={idx} className="flex items-center gap-2">
+                              <Check className="w-5 h-5 text-green shrink-0" />
+                              {feature}
+                            </li>
+                          ))}
                         </ul>
+
+                        <p className="text-sm text-dark-light">{duplex.description}</p>
+
+                        <div className="pt-4 border-t border-gray-200 mt-4">
+                          <span className="text-3xl font-bold text-orange">{duplex.price} ₽</span>
+                        </div>
                       </div>
                     </div>
                   </DialogContent>
