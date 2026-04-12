@@ -47,7 +47,7 @@ export function LeadForm({ title, buttonText, fields, variant = 'light' }: LeadF
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('send-lead.php', {
+      const response = await fetch('/send-lead.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
