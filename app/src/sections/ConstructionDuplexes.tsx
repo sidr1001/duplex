@@ -42,10 +42,12 @@ export function ConstructionDuplexes() {
 
               <div className="p-6">
                 <h3 className="text-xl font-bold text-dark mb-3">{duplex.name}</h3>
-                <div className="flex flex-wrap gap-4 mb-4 text-dark-light text-sm">
+                <div className="flex flex-wrap gap-4 mb-3 text-dark-light text-sm">
                   <div className="flex items-center gap-1"><Maximize className="w-4 h-4" /><span>{duplex.area} м²</span></div>
                   <div className="flex items-center gap-1"><Calendar className="w-4 h-4" /><span>{content.construction.completionText}: {duplex.completion}</span></div>
                 </div>
+
+                <p className="text-sm text-dark-light leading-relaxed mb-4">{duplex.description}</p>
 
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-2">

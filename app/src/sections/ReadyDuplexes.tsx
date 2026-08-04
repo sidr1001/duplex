@@ -36,6 +36,10 @@ function getReadyImages(duplex: ReadyDuplex) {
   return [];
 }
 
+function isSoldStatus(status: string) {
+  return status.trim().toLowerCase() === 'продано';
+}
+
 function DuplexImageSlider({ duplex, className }: { duplex: ReadyDuplex; className: string }) {
   const images = getReadyImages(duplex);
   const [index, setIndex] = useState(0);
@@ -100,11 +104,14 @@ export function ReadyDuplexes() {
           viewport={{ once: true }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16"
         >
-          {content.ready.duplexes.map((duplex) => (
+          {content.ready.duplexes.map((duplex) => {
+            const isSold = isSoldStatus(duplex.status);
+
+            return (
             <motion.div key={duplex.id} variants={itemVariants} className="bg-white rounded-3xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-300 border border-gray-100">
               <div className="relative h-56 md:h-64 overflow-hidden">
                 <DuplexImageSlider duplex={duplex} className="h-full w-full" />
-                <Badge className="absolute top-4 left-4 bg-green text-white border-0">{duplex.status}</Badge>
+                <Badge className={`absolute top-4 left-4 text-white border-0 ${isSold ? 'bg-gray-500' : 'bg-green'}`}>{duplex.status}</Badge>
               </div>
 
               <div className="p-6">
@@ -168,11 +175,18 @@ export function ReadyDuplexes() {
                 </Dialog>
 
                 <div className="mt-4 pt-4 border-t border-gray-100">
-                  <LeadForm title="" buttonText={content.ready.leadButtonText} fields={['phone']} variant="light" />
+                  {isSold ? (
+                    <Button type="button" disabled className="w-full py-6 rounded-xl bg-gray-300 text-gray-600 cursor-not-allowed">
+                      Продано
+                    </Button>
+                  ) : (
+                    <LeadForm title="" buttonText={content.ready.leadButtonText} fields={['phone']} variant="light" />
+                  )}
                 </div>
               </div>
             </motion.div>
-          ))}
+            );
+          })}
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="bg-gradient-to-br from-orange/10 to-turquoise/10 rounded-3xl p-8 md:p-12">

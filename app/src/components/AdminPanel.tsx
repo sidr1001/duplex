@@ -18,6 +18,7 @@ const JSON_HINT_LINES = [
   '// footer: описание и реквизиты организации',
   '// ready.duplexes[].images: массив изображений для слайдера',
   '// ready.duplexes[].description: дополнительный текст для карточки/модалки',
+  '// construction.duplexes[].description: описание дома в строительстве',
   ''
 ].join('\n');
 

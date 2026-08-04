@@ -24,6 +24,7 @@ export interface ConstructionDuplex {
   name: string;
   area: number;
   completion: string;
+  description: string;
   price: string;
   oldPrice: string | null;
   progress: number;
@@ -253,6 +254,7 @@ export const defaultSiteContent: SiteContent = {
         name: 'Дуплекс "Мечта"',
         area: 135,
         completion: 'IV квартал 2024',
+        description: 'Продуманный двухэтажный дуплекс с просторной кухней-гостиной и террасой. Сейчас доступна выгодная цена на этапе строительства.',
         price: '7 900 000',
         oldPrice: '9 200 000',
         progress: 65,
@@ -265,6 +267,7 @@ export const defaultSiteContent: SiteContent = {
         name: 'Дуплекс "Уютный"',
         area: 150,
         completion: 'II квартал 2025',
+        description: 'Уютный семейный дуплекс с функциональной планировкой, отдельными спальнями и возможностью выбрать чистовую отделку.',
         price: '8 500 000',
         oldPrice: null,
         progress: 30,
