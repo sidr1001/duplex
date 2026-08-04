@@ -38,6 +38,7 @@ export interface SiteContent {
     companyName: string;
     phoneDisplay: string;
     phoneHref: string;
+    whatsappPhone: string;
     email: string;
     leadRecipientEmail: string;
     address: string;
@@ -124,6 +125,7 @@ export const defaultSiteContent: SiteContent = {
     companyName: 'Дуплекс-Строй',
     phoneDisplay: '8 (800) 123-45-67',
     phoneHref: '+78001234567',
+    whatsappPhone: '+78001234567',
     email: 'info@duplexstroy.ru',
     leadRecipientEmail: 'sales@duplexstroy.ru',
     address: 'г. Москва, ул. Строителей, 25, офис продаж',
