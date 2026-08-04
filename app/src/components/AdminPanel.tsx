@@ -19,6 +19,7 @@ const JSON_HINT_LINES = [
   '// ready.duplexes[].images: массив изображений для слайдера',
   '// ready.duplexes[].description: дополнительный текст для карточки/модалки',
   '// construction.duplexes[].description: описание дома в строительстве',
+  '// construction.duplexes[].floorPlanImage: картинка схемы/планировки дома',
   ''
 ].join('\n');
 

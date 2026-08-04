@@ -1,8 +1,9 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { LeadForm } from '@/components/LeadForm';
-import { Calendar, Maximize, TrendingUp, Gift } from 'lucide-react';
+import { Calendar, Maximize, TrendingUp, Gift, Map } from 'lucide-react';
 import { useSiteContent } from '@/context/SiteContentContext';
 
 function ProgressBar({ percentage }: { percentage: number }) {
@@ -48,6 +49,30 @@ export function ConstructionDuplexes() {
                 </div>
 
                 <p className="text-sm text-dark-light leading-relaxed mb-4">{duplex.description}</p>
+
+                {duplex.floorPlanImage && (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button type="button" className="group mb-4 w-full overflow-hidden rounded-2xl border border-gray-100 bg-gray-50 text-left transition-all hover:border-turquoise hover:shadow-card">
+                        <div className="grid grid-cols-[96px_1fr] items-center gap-4 p-3">
+                          <div className="h-20 overflow-hidden rounded-xl bg-white">
+                            <img src={duplex.floorPlanImage} alt={`Схема ${duplex.name}`} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                          </div>
+                          <div>
+                            <div className="mb-1 flex items-center gap-2 font-semibold text-dark"><Map className="h-4 w-4 text-turquoise" />Схема дома</div>
+                            <p className="text-sm text-dark-light">Откройте планировку и расположение помещений</p>
+                          </div>
+                        </div>
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-[95vw] sm:max-w-3xl md:max-w-5xl max-h-[90vh] overflow-y-auto p-6">
+                      <DialogHeader>
+                        <DialogTitle className="text-2xl md:text-3xl font-bold">{duplex.name} — схема дома</DialogTitle>
+                      </DialogHeader>
+                      <img src={duplex.floorPlanImage} alt={`Схема ${duplex.name}`} className="mt-4 max-h-[70vh] w-full rounded-2xl object-contain bg-gray-50" />
+                    </DialogContent>
+                  </Dialog>
+                )}
 
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-2">

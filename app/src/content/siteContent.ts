@@ -30,6 +30,7 @@ export interface ConstructionDuplex {
   progress: number;
   offer: string;
   image: string;
+  floorPlanImage: string;
   formTitle: string;
 }
 
@@ -262,6 +263,7 @@ export const defaultSiteContent: SiteContent = {
         progress: 65,
         offer: 'При бронировании до конца месяца — отделка в подарок!',
         image: '/images/construction-1.jpg',
+        floorPlanImage: '/images/construction-1.jpg',
         formTitle: 'Забронировать по стартовой цене'
       },
       {
@@ -275,6 +277,7 @@ export const defaultSiteContent: SiteContent = {
         progress: 30,
         offer: 'Рассрочка 0% до конца строительства',
         image: '/images/construction-2.jpg',
+        floorPlanImage: '/images/construction-2.jpg',
         formTitle: 'Узнать условия рассрочки'
       }
     ]
