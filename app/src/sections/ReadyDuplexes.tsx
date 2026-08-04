@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { LeadForm } from '@/components/LeadForm';
-import { Bed, Bath, Maximize, Check } from 'lucide-react';
+import { Bed, Bath, Maximize, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSiteContent } from '@/context/SiteContentContext';
+import type { ReadyDuplex } from '@/content/siteContent';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -27,6 +29,56 @@ const itemVariants = {
     }
   }
 };
+
+function getReadyImages(duplex: ReadyDuplex) {
+  if (duplex.images?.length) return duplex.images;
+  if (duplex.image) return [duplex.image];
+  return [];
+}
+
+function isSoldStatus(status: string) {
+  return status.trim().toLowerCase() === 'продано';
+}
+
+function DuplexImageSlider({ duplex, className }: { duplex: ReadyDuplex; className: string }) {
+  const images = getReadyImages(duplex);
+  const [index, setIndex] = useState(0);
+
+  const next = () => setIndex((prev) => (prev + 1) % images.length);
+  const prev = () => setIndex((prev) => (prev - 1 + images.length) % images.length);
+
+  if (!images.length) {
+    return <div className={`${className} bg-gray-100`} />;
+  }
+
+  return (
+    <div className={`relative overflow-hidden ${className}`}>
+      <img src={images[index]} alt={`${duplex.name} ${index + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+
+      {images.length > 1 && (
+        <>
+          <button type="button" onClick={prev} className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-1 text-white hover:bg-black/60" aria-label="Предыдущее изображение">
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button type="button" onClick={next} className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-1 text-white hover:bg-black/60" aria-label="Следующее изображение">
+            <ChevronRight className="h-5 w-5" />
+          </button>
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {images.map((_, dotIndex) => (
+              <button
+                key={dotIndex}
+                type="button"
+                onClick={() => setIndex(dotIndex)}
+                className={`h-2 w-2 rounded-full ${index === dotIndex ? 'bg-white' : 'bg-white/50'}`}
+                aria-label={`Перейти к изображению ${dotIndex + 1}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 export function ReadyDuplexes() {
   const { content } = useSiteContent();
@@ -52,15 +104,19 @@ export function ReadyDuplexes() {
           viewport={{ once: true }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16"
         >
-          {content.ready.duplexes.map((duplex) => (
+          {content.ready.duplexes.map((duplex) => {
+            const isSold = isSoldStatus(duplex.status);
+
+            return (
             <motion.div key={duplex.id} variants={itemVariants} className="bg-white rounded-3xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-300 border border-gray-100">
               <div className="relative h-56 md:h-64 overflow-hidden">
-                <img src={duplex.image} alt={duplex.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                <Badge className="absolute top-4 left-4 bg-green text-white border-0">{duplex.status}</Badge>
+                <DuplexImageSlider duplex={duplex} className="h-full w-full" />
+                <Badge className={`absolute top-4 left-4 text-white border-0 ${isSold ? 'bg-gray-500' : 'bg-green'}`}>{duplex.status}</Badge>
               </div>
 
               <div className="p-6">
-                <h3 className="text-xl font-bold text-dark mb-3">{duplex.name}</h3>
+                <h3 className="text-xl font-bold text-dark mb-2">{duplex.name}</h3>
+                <p className="text-sm text-dark-light mb-3">{duplex.description}</p>
                 <div className="flex flex-wrap gap-4 mb-4 text-dark-light text-sm">
                   <div className="flex items-center gap-1"><Maximize className="w-4 h-4" /><span>{duplex.area} м²</span></div>
                   <div className="flex items-center gap-1"><Bed className="w-4 h-4" /><span>{duplex.bedrooms} спальни</span></div>
@@ -75,29 +131,62 @@ export function ReadyDuplexes() {
 
                 <Dialog>
                   <DialogTrigger asChild><Button className="w-full bg-turquoise hover:bg-turquoise-dark text-white font-semibold rounded-xl">{content.ready.openPlanButtonText}</Button></DialogTrigger>
-                  <DialogContent className="max-w-3xl">
-                    <DialogHeader><DialogTitle className="text-2xl">{duplex.name} — Планировка</DialogTitle></DialogHeader>
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <img src={duplex.image} alt={duplex.name} className="w-full h-64 object-cover rounded-xl" />
-                      <div>
-                        <h4 className="font-bold text-lg mb-3">Характеристики:</h4>
-                        <ul className="space-y-2 text-dark-light">
-                          <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green" />Площадь: {duplex.area} м²</li>
-                          <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green" />Спален: {duplex.bedrooms}</li>
-                          <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green" />Санузлов: {duplex.bathrooms}</li>
-                          {duplex.features.map((feature, idx) => <li key={idx} className="flex items-center gap-2"><Check className="w-4 h-4 text-green" />{feature}</li>)}
+                  <DialogContent className="max-w-[95vw] sm:max-w-4xl md:max-w-6xl max-h-[90vh] overflow-y-auto p-6 md:p-8">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl md:text-3xl font-bold">{duplex.name} — Планировка</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 items-start">
+                      <div className="md:col-span-3">
+                        <DuplexImageSlider duplex={duplex} className="w-full h-72 md:h-[500px] rounded-xl" />
+                      </div>
+
+                      <div className="md:col-span-1 space-y-4 md:sticky md:top-4">
+                        <h4 className="font-bold text-lg">Характеристики:</h4>
+                        <ul className="space-y-3 text-dark-light">
+                          <li className="flex items-center gap-2">
+                            <Check className="w-5 h-5 text-green shrink-0" />
+                            Площадь: {duplex.area} м²
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <Check className="w-5 h-5 text-green shrink-0" />
+                            Спален: {duplex.bedrooms}
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <Check className="w-5 h-5 text-green shrink-0" />
+                            Санузлов: {duplex.bathrooms}
+                          </li>
+                          {duplex.features.map((feature, idx) => (
+                            <li key={idx} className="flex items-center gap-2">
+                              <Check className="w-5 h-5 text-green shrink-0" />
+                              {feature}
+                            </li>
+                          ))}
                         </ul>
+
+                        <p className="text-sm text-dark-light">{duplex.description}</p>
+
+                        <div className="pt-4 border-t border-gray-200 mt-4">
+                          <span className="text-3xl font-bold text-orange">{duplex.price} ₽</span>
+                        </div>
                       </div>
                     </div>
                   </DialogContent>
                 </Dialog>
 
                 <div className="mt-4 pt-4 border-t border-gray-100">
-                  <LeadForm title="" buttonText={content.ready.leadButtonText} fields={['phone']} variant="light" />
+                  {isSold ? (
+                    <Button type="button" disabled className="w-full py-6 rounded-xl bg-gray-300 text-gray-600 cursor-not-allowed">
+                      Продано
+                    </Button>
+                  ) : (
+                    <LeadForm title="" buttonText={content.ready.leadButtonText} fields={['phone']} variant="light" />
+                  )}
                 </div>
               </div>
             </motion.div>
-          ))}
+            );
+          })}
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="bg-gradient-to-br from-orange/10 to-turquoise/10 rounded-3xl p-8 md:p-12">

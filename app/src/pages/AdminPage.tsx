@@ -3,30 +3,40 @@ import { AdminPanel } from '@/components/AdminPanel';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { useSiteContent } from '@/context/SiteContentContext';
+import { Toaster } from '@/components/ui/sonner';
 
-const ADMIN_LOGIN = 'admin';
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'duplex-admin-2026';
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 const SESSION_KEY = 'duplex-admin-auth';
 
 export function AdminPage() {
+  const { content } = useSiteContent();
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [authorized, setAuthorized] = useState(() => sessionStorage.getItem(SESSION_KEY) === '1');
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (login === ADMIN_LOGIN && password === ADMIN_PASSWORD) {
+
+    if (!ADMIN_PASSWORD) {
+      toast.error('VITE_ADMIN_PASSWORD не задан в .env');
+      return;
+    }
+
+    if (login === content.admin.login && password === ADMIN_PASSWORD) {
       sessionStorage.setItem(SESSION_KEY, '1');
       setAuthorized(true);
       toast.success('Доступ разрешен');
       return;
     }
+
     toast.error('Неверный логин или пароль');
   };
 
   if (!authorized) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <>
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <form onSubmit={onSubmit} className="w-full max-w-md bg-white rounded-2xl shadow-card p-6 space-y-4">
           <h1 className="text-2xl font-bold">Вход в админку</h1>
           <p className="text-dark-light text-sm">Доступ только для администратора.</p>
@@ -34,7 +44,9 @@ export function AdminPage() {
           <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Пароль" required />
           <Button type="submit" className="w-full">Войти</Button>
         </form>
-      </div>
+        </div>
+        <Toaster />
+      </>
     );
   }
 
@@ -50,6 +62,7 @@ export function AdminPage() {
         </div>
       </div>
       <AdminPanel />
+      <Toaster />
     </div>
   );
 }

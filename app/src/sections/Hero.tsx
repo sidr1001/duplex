@@ -22,15 +22,7 @@ const staggerContainer = {
 export function Hero() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { content } = useSiteContent();
-
-  const navLinks = [
-    { href: '#advantages', label: 'Преимущества' },
-    { href: '#about', label: 'О компании' },
-    { href: '#ready', label: 'Готовые дуплексы' },
-    { href: '#construction', label: 'В строительстве' },
-    { href: '#mortgage', label: 'Ипотека' },
-    { href: '#reviews', label: 'Отзывы' },
-  ];
+  const navLinks = content.hero.navLinks;
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -149,8 +141,8 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
             <LeadForm
-              title="Получить каталог проектов + актуальные цены"
-              buttonText="Скачать каталог"
+              title={content.hero.catalogFormTitle}
+              buttonText={content.hero.catalogFormButtonText}
               fields={['phone']}
               variant="light"
             />

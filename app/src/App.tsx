@@ -16,6 +16,8 @@ import { MapSection } from '@/sections/MapSection';
 import { useSiteContent } from '@/context/SiteContentContext';
 import { AdminPage } from '@/pages/AdminPage';
 
+const adminPath = import.meta.env.VITE_ADMIN_PATH || '/admin';
+
 function App() {
   const { content } = useSiteContent();
 
@@ -51,23 +53,23 @@ function App() {
     setMeta('og:image', content.seo.ogImage, 'property');
   }, [content.seo]);
 
-  if (window.location.pathname === '/admin') {
+  if (window.location.pathname === adminPath) {
     return <AdminPage />;
   }
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
-      <Hero />
-      <Advantages />
-      <About />
-      <ReadyDuplexes />
-      <ConstructionDuplexes />
-      <Mortgage />
-      <Reviews />
-      <Steps />
-      <Guarantees />
-      <MapSection />
-      <FinalCTA />
+      {content.sections.hero && <Hero />}
+      {content.sections.advantages && <Advantages />}
+      {content.sections.about && <About />}
+      {content.sections.ready && <ReadyDuplexes />}
+      {content.sections.construction && <ConstructionDuplexes />}
+      {content.sections.mortgage && <Mortgage />}
+      {content.sections.reviews && <Reviews />}
+      {content.sections.steps && <Steps />}
+      {content.sections.guarantees && <Guarantees />}
+      {content.sections.map && <MapSection />}
+      {content.sections.finalCta && <FinalCTA />}
       <Footer />
       <FloatingButton />
       <Toaster />

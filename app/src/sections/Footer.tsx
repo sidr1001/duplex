@@ -2,24 +2,15 @@ import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Clock, ExternalLink } from 'lucide-react';
 import { useSiteContent } from '@/context/SiteContentContext';
 
-const socialLinks = [
-  { name: 'WhatsApp', href: 'https://wa.me/78001234567', icon: '💬' },
-  { name: 'Telegram', href: 'https://t.me/duplexstroy', icon: '✈️' },
-  { name: 'Instagram', href: 'https://instagram.com/duplexstroy', icon: '📷' },
-];
-
-const footerLinks = [
-  { label: 'Преимущества', href: '#advantages' },
-  { label: 'О компании', href: '#about' },
-  { label: 'Готовые дуплексы', href: '#ready' },
-  { label: 'В строительстве', href: '#construction' },
-  { label: 'Ипотека', href: '#mortgage' },
-  { label: 'Отзывы', href: '#reviews' },
-  { label: 'Карта', href: '#map' },
-];
-
 export function Footer() {
   const { content } = useSiteContent();
+
+  const socialLinks = [
+    { name: 'WhatsApp', href: content.socials.whatsapp, icon: '💬' },
+    { name: 'Telegram', href: content.socials.telegram, icon: '✈️' },
+    { name: 'Instagram', href: content.socials.instagram, icon: '📷' },
+    { name: 'Max', href: content.socials.max, icon: 'Ⓜ️' },
+  ].filter((social) => social.href);
 
   return (
     <footer className="bg-[#1A1A2E] text-white py-16">
@@ -30,7 +21,8 @@ export function Footer() {
               <img src={content.contacts.logoPath} alt={content.contacts.companyName} className="h-12 w-auto rounded bg-white p-1" />
               <div className="text-2xl font-bold">{content.contacts.companyName}</div>
             </div>
-            <p className="text-white/60 mb-6 max-w-md">Строим яркие дуплексы для счастливой жизни с 2009 года. Собственное производство, все льготные ипотеки, отделка под ключ.</p>
+            <p className="text-white/60 mb-4 max-w-md">{content.footer.description}</p>
+            <p className="text-white/40 text-sm mb-6 max-w-md">{content.footer.orgName}. {content.footer.orgDetails}</p>
 
             <div className="flex gap-3">
               {socialLinks.map((social) => (
@@ -42,7 +34,7 @@ export function Footer() {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}>
-            <h4 className="font-bold text-lg mb-4">Контакты</h4>
+            <h4 className="font-bold text-lg mb-4">{content.footer.contactsTitle}</h4>
             <ul className="space-y-3">
               <li><a href={`tel:${content.contacts.phoneHref}`} className="flex items-center gap-2 text-white/60 hover:text-orange transition-colors"><Phone className="w-4 h-4" />{content.contacts.phoneDisplay}</a></li>
               <li><a href={`mailto:${content.contacts.email}`} className="flex items-center gap-2 text-white/60 hover:text-orange transition-colors"><Mail className="w-4 h-4" />{content.contacts.email}</a></li>
@@ -52,9 +44,9 @@ export function Footer() {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}>
-            <h4 className="font-bold text-lg mb-4">Разделы</h4>
+            <h4 className="font-bold text-lg mb-4">{content.footer.sectionsTitle}</h4>
             <ul className="space-y-2">
-              {footerLinks.map((link) => (
+              {content.footer.footerLinks.map((link) => (
                 <li key={link.href}><a href={link.href} className="text-white/60 hover:text-orange transition-colors">{link.label}</a></li>
               ))}
             </ul>
@@ -65,8 +57,8 @@ export function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/40 text-sm text-center md:text-left">© 2026 {content.contacts.companyName}. Все права защищены.</p>
             <div className="flex gap-4 text-sm">
-              <a href="#" className="text-white/40 hover:text-orange transition-colors flex items-center gap-1">Проектная декларация<ExternalLink className="w-3 h-3" /></a>
-              <a href="#" className="text-white/40 hover:text-orange transition-colors">Политика конфиденциальности</a>
+              <a href={content.footer.declarationLink} className="text-white/40 hover:text-orange transition-colors flex items-center gap-1">{content.footer.declarationLinkText}<ExternalLink className="w-3 h-3" /></a>
+              <a href={content.footer.privacyLink} className="text-white/40 hover:text-orange transition-colors">{content.footer.privacyLinkText}</a>
             </div>
           </div>
         </motion.div>
